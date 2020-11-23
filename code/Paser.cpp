@@ -53,16 +53,16 @@ int main() {
   while (!input.eof()) {
     string temp;
     input >> temp;
-    string temp2 = r.identifier(temp);
+
+    /* Identifier is not working completly */
     if (r.CheckKeyWord(temp)) {
-      cout << temp << '\n';
+      cout << "KeyWords: " << temp << '\n';
       x++;
     }
-    /* Identifier is under progress...
-     if (temp2.length() > 0 && !(r.CheckKeyWord(temp))) {
-       cout << "Identifier-->" << temp2 << endl;
-       }
-
-   */
+    string temp2 = r.identifier(temp);
+    if (temp2.length() != 0 && temp2 != temp) {
+      cout << "Identifier:" << temp2 << endl;
+    }
   }
+  cout << "Total " << x << " KeyWords Found in file.\n";
 }
