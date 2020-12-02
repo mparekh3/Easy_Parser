@@ -7,7 +7,8 @@ class Compiler{
 
 private : 
 string source; 
-public : 
+public :
+    //Week 2 updated
 void foundIdentifier ( uint32_t start , uint32_t end ) ; 
 void foundIntConst ( uint32_t start , uint32_t end ) ; 
 void foundLongConst ( uint32_t start , uint32_t end ) ; 
@@ -89,6 +90,4 @@ int main(){
    for(int i=0;i<input.tellg();i++){
        cout<<b[i]<<"  ";
    }
-    
-
 }
