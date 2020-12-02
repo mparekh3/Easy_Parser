@@ -21,6 +21,5 @@ int main() {
 
   for (unsigned i = 0; i < match.size(); ++i) {
   }
-
   return 0;
 }
