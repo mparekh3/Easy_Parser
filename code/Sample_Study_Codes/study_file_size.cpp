@@ -8,4 +8,5 @@ int main() {
   cout << "Size of the file is"
        << " " << file_size << " "
        << "bytes";
+  
 }
