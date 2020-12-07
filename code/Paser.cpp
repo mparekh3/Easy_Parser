@@ -7,8 +7,7 @@ class Compiler{
 
 private : 
 string source; 
-public :
-    //Week 2 updated
+public : 
 void foundIdentifier ( uint32_t start , uint32_t end ) ; 
 void foundIntConst ( uint32_t start , uint32_t end ) ; 
 void foundLongConst ( uint32_t start , uint32_t end ) ; 
@@ -60,8 +59,8 @@ int main(){
 
 
     input.open(fileName);
-    char *b;
-    input.getline(b,input.tellg());
+    string b;
+    getline(input,b,'\0');
     if(input.is_open())
         cout<<"file is open."<<endl;
     else{
@@ -70,7 +69,7 @@ int main(){
     }
     RXEng r;
     int x=0;
-    while(!input.eof()){
+   /*  while(!input.eof()){
         string temp;
         input>>temp;
         
@@ -86,8 +85,10 @@ int main(){
             cout<<"floatCon:"<<temp<<'\n';
             
         }
-    }
-   for(int i=0;i<input.tellg();i++){
-       cout<<b[i]<<"  ";
-   }
+    } */
+   
+       cout<<b<<"";
+   
+    
+
 }
