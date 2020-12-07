@@ -13,12 +13,19 @@ class Compiler {
   void foundLongConst(uint32_t start, uint32_t end);
 };
 class RXEng {
+ private:
+  // string source;
+
  public:
-  bool CheckKeyWord(string s) {
+  string source;
+
+  bool CheckKeyWord(uint32_t start, uint32_t end) {
     fstream key;
     string word;
+    string s = source.substr(start, end);
     bool match;
     key.open("KeyWords.txt");
+
     while (key >> word) {
       regex e(word);
       match = regex_match(s, e);
@@ -26,9 +33,10 @@ class RXEng {
     }
     return false;
   }
-  bool CheckintCont(string s) {
+  bool CheckintCont(uint32_t start, uint32_t end) {
     fstream key;
     string word = "-?[\\d]+";
+    string s = source.substr(start, end);
     bool match;
     regex e(word);
     match = regex_match(s, e);
@@ -36,9 +44,10 @@ class RXEng {
 
     return false;
   }
-  bool CheckfloatCont(string s) {
+  bool CheckfloatCont(uint32_t start, uint32_t end) {
     fstream key;
     string word = "-?[\\d]+\\.[\\d]{1,8}";
+    string s = source.substr(start, end);
     bool match;
     regex e(word);
     match = regex_match(s, e);
@@ -46,9 +55,10 @@ class RXEng {
 
     return false;
   }
-  bool CheckWhiteSpace(string s) {
+  bool CheckWhiteSpace(uint32_t start, uint32_t end) {
     fstream key;
     string word = "([ \\ t \\ r \\n] +)";
+    string s = source.substr(start, end);
     bool match;
     regex e(word);
     match = regex_match(s, e);
@@ -71,30 +81,20 @@ int main() {
     return 1;
   }
   RXEng r;
-
-  int x = 0;
-  if (r.CheckWhiteSpace(b)) cout << "found white space" << endl;
-  /*  while(!input.eof()){
-       string temp;
-       input>>temp;
-
-       if(r.CheckKeyWord(temp)){
-           cout<<"KeyWord:"<<temp<<'\n';
-           x++;
-       }
-       else if(r.CheckintCont(temp)){
-           cout<<"intCon:"<<temp<<'\n';
-
-       }
-        else if(r.CheckfloatCont(temp)){
-           cout<<"floatCon:"<<temp<<'\n';
-
-       }
-   }
-  int start = 0;
-  int end = sizeof(b) * sizeof(string);
+  uint32_t start = 0;
+  uint32_t end = 1;
+  /*
   for (int i = start; i <= sizeof(b) * sizeof(string); i++) {
-    if (b[i] == r.ch) }
-}
-}*/
+    if(r.CheckWhiteSpace(start, end)) {
+      start = start + 1;
+      end = end + 1;
+    }
+    while(!r.CheckWhiteSpace(start,end)){
+      end = end + 1;
+    }
+    if (r.CheckKeyWord(start, end)) {
+      cout << "keyword:" << b.substr(start, end) << endl;
+    }
+  }
+  */
 }
