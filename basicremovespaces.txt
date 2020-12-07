@@ -1,0 +1,71 @@
+// logic to remove comments and spaces from a program and then will use this to apply for a file
+//This program prints the original program with comments and also prints the same program without comments
+
+string removeComments(string prgm) 
+{ 
+    int n = prgm.length(); 
+    string res; 
+   
+    bool s_cmt = false; 
+    bool m_cmt = false; 
+  
+    for (int i=0; i<n; i++) 
+    {  //for checking ending of comments section
+        if (s_cmt == true && prgm[i] == '\n') 
+            s_cmt = false; 
+   
+        else if  (m_cmt == true && prgm[i] == '*' && prgm[i+1] == '/') 
+            m_cmt = false,  i++; 
+  
+        else if (s_cmt || m_cmt) 
+            continue; 
+   // For checking beginning of comments
+        else if (prgm[i] == '/' && prgm[i+1] == '/') 
+            s_cmt = true, i++; 
+        else if (prgm[i] == '/' && prgm[i+1] == '*') 
+            m_cmt = true,  i++; 
+  
+        else  res += prgm[i]; 
+    } 
+    return res; 
+} 
+ 
+int main() 
+{ 
+    string prgm = "   /* Test program */ \n"
+                  "   int main()  \n"
+                  "   {           \n"
+                  "      // variable declarations \n"
+                  "      int a, b, res;    \n"
+                  "      /* Random  \n"
+                  "          comments     \n"
+                  "          for mutiple    \n"
+                  "        */     case \n"
+                  "      res = a * b;       \n"
+                  "   }           \n"; 
+    cout << "Given Program \n"; 
+    cout << prgm << endl; 
+    cout << " Modified Program "; 
+    cout << removeComments(prgm); 
+    return 0; 
+}
+
+// To remove spaces from a string, will apply this logic, to remove spaces from a line from input file.  
+void removeSpaces(char *str) 
+{ 
+    // count of all characters except space
+    int count = 0; 
+
+    for (int i = 0; str[i]; i++) 
+        if (str[i] != ' ') 
+            str[count++] = str[i];  
+                                 
+    str[count] = '\0'; 
+}
+int main() 
+{ 
+    char str[] = "g  eeks   for ge  eeks  "; 
+    removeSpaces(str); 
+    cout << str; 
+    return 0; 
+} 
