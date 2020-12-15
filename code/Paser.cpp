@@ -2,6 +2,8 @@
 #include <iostream>
 #include <regex>
 #include <string>
+
+#include "comment.h"
 using namespace std;
 class Compiler {
  private:
@@ -55,6 +57,7 @@ class RXEng {
 
     return false;
   }
+
   bool CheckWhiteSpace(uint32_t start, uint32_t end) {
     fstream key;
     string word = "([ \\ t \\ r \\n] +)";
@@ -63,16 +66,19 @@ class RXEng {
     regex e(word);
     match = regex_match(s, e);
     if (match) return match;
+    return false;
   }
 };
+
 int main() {
-  string fileName;
-  cout << "Enter File Name:";
-  cin >> fileName;
+  string fileName = "TestFile.cpp";
+  // cout << "Enter File Name:";
+  // cin >> fileName;
   fstream input;
 
   input.open(fileName);
   string b;
+
   getline(input, b, '\0');
   if (input.is_open())
     cout << "file is open." << endl;
@@ -83,18 +89,71 @@ int main() {
   RXEng r;
   uint32_t start = 0;
   uint32_t end = 1;
-  /*
-  for (int i = start; i <= sizeof(b) * sizeof(string); i++) {
-    if(r.CheckWhiteSpace(start, end)) {
-      start = start + 1;
-      end = end + 1;
+  bool a;
+  r.source = b;
+  for (int i = 0; i <= sizeof(b) * sizeof(string); i++) {
+    if (a = r.CheckWhiteSpace(start, end)) {
+      start++;
+      end++;
     }
-    while(!r.CheckWhiteSpace(start,end)){
-      end = end + 1;
+    while (!r.CheckWhiteSpace(start, end)) {
+      end++;
     }
     if (r.CheckKeyWord(start, end)) {
-      cout << "keyword:" << b.substr(start, end) << endl;
+      if (b.substr(start, end) == "include") {
+        while (r.CheckWhiteSpace(start, end)) {
+          start++;
+          end++;
+        }
+        while (!r.CheckWhiteSpace(start, end)) {
+          end++;
+        }
+        if (b.substr(start, end) == "<") {
+          continue;
+        } else
+          throw("Wrong harder")
+      }
+    } else {
+      throw("error at position:", start);
+    }
+    if (r.CheckKeyWord() == "int") {
+      while (!r.CheckWhiteSpace(start, end)) {
+        start++;
+        end++;
+      }
+      if (b.substr(start, end) == "main") {
+        search(b[start]);
+        search(b[end]);
+        if (paren == 0) {
+          start++;
+          end++;
+        }
+        search(b[start]);
+
+        if (brace == 1) {
+          if (r.CheckfloatCont(start, end)) {
+            start++;
+            end++;
+            /*
+             if conditions for next token
+            */
+          }
+          if (r.CheckintCont(start, end)) {
+            start++;
+            end++;
+            /*
+           if conditions for next token
+           */
+          }
+          if (r.CheckKeyWord(start, end)) {
+            start++;
+            end++;
+            /*
+           if conditions for next token
+           */
+          }
+        }
+      }
     }
   }
-  */
 }
