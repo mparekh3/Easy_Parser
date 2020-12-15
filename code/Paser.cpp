@@ -8,6 +8,7 @@
 #include "comment.h"
 
 using namespace std;
+/*
 class Compiler {
  private:
   string source;
@@ -17,6 +18,7 @@ class Compiler {
   void foundIntConst(uint32_t start, uint32_t end) {}
   void foundLongConst(uint32_t start, uint32_t end) {}
 };
+*/
 class RXEng {
  private:
   // string source;
