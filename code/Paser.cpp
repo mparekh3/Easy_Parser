@@ -1,9 +1,12 @@
 #include <fstream>
 #include <iostream>
+#include <map>
 #include <regex>
 #include <string>
+#include <vector>
 
 #include "comment.h"
+
 using namespace std;
 class Compiler {
  private:
@@ -11,8 +14,8 @@ class Compiler {
 
  public:
   void foundIdentifier(uint32_t start, uint32_t end) {}
-  void foundIntConst(uint32_t start, uint32_t end);
-  void foundLongConst(uint32_t start, uint32_t end);
+  void foundIntConst(uint32_t start, uint32_t end) {}
+  void foundLongConst(uint32_t start, uint32_t end) {}
 };
 class RXEng {
  private:
@@ -25,60 +28,48 @@ class RXEng {
     fstream key;
     string word;
     string s = source.substr(start, end);
-    bool match;
+    smatch m;
     key.open("KeyWords.txt");
 
     while (key >> word) {
       regex e(word);
-      match = regex_match(s, e);
-      if (match) return match;
+      return regex_search(s, m, e);
     }
     return false;
   }
+
   bool CheckintCont(uint32_t start, uint32_t end) {
-    fstream key;
-    string word = "-?[\\d]+";
     string s = source.substr(start, end);
-    bool match;
-    regex e(word);
-    match = regex_match(s, e);
-    if (match) return match;
-
-    return false;
+    smatch m;
+    regex e("-?[\\d]+");
+    return regex_search(s, m, e);
   }
+
   bool CheckfloatCont(uint32_t start, uint32_t end) {
-    fstream key;
-    string word = "-?[\\d]+\\.[\\d]{1,8}";
     string s = source.substr(start, end);
-    bool match;
-    regex e(word);
-    match = regex_match(s, e);
-    if (match) return match;
-
-    return false;
+    smatch m;
+    regex e("-?[\\d]+\\.[\\d]{1,8}");
+    return regex_search(s, m, e);
   }
-
-  bool CheckWhiteSpace(uint32_t start, uint32_t end) {
-    fstream key;
-    string word = "([ \\ t \\ r \\n] +)";
+  bool CheckSpecialChar(uint32_t start, uint32_t end) {
     string s = source.substr(start, end);
-    bool match;
-    regex e(word);
-    match = regex_match(s, e);
-    if (match) return match;
-    return false;
+    smatch m;
+    regex e("[^a-zA-Z0-9]+");
+    return regex_search(s, m, e);
+  }
+  bool CheckWhiteSpace(uint32_t start, uint32_t end) {
+    string s = source.substr(start, end);
+    smatch m;
+    regex e("[\\t\\r\\n]+");
+    return regex_search(s, m, e);
   }
 };
 
 int main() {
-  string fileName = "TestFile.cpp";
-  // cout << "Enter File Name:";
-  // cin >> fileName;
+  string fileName = "text.txt";
   fstream input;
-
   input.open(fileName);
   string b;
-
   getline(input, b, '\0');
   if (input.is_open())
     cout << "file is open." << endl;
@@ -86,74 +77,62 @@ int main() {
     cout << "file not found." << endl;
     return 1;
   }
+
+  // int i=0;
+  // while(b[i]!='\0')
   RXEng r;
-  uint32_t start = 0;
-  uint32_t end = 1;
-  bool a;
+  int start = 0;
+  int end = 1;
+  int i = 0;
+  string t;
   r.source = b;
-  for (int i = 0; i <= sizeof(b) * sizeof(string); i++) {
-    if (a = r.CheckWhiteSpace(start, end)) {
+  for (i; i <= b.length(); i++) {
+    if (b[start] == ' ' || b[start] == '\n' || b[start] == '\t') {
       start++;
       end++;
+      continue;
     }
-    while (!r.CheckWhiteSpace(start, end)) {
+    if (b[end] != ' ') {
       end++;
+      continue;
     }
-    if (r.CheckKeyWord(start, end)) {
-      if (b.substr(start, end) == "include") {
-        while (r.CheckWhiteSpace(start, end)) {
-          start++;
-          end++;
-        }
-        while (!r.CheckWhiteSpace(start, end)) {
-          end++;
-        }
-        if (b.substr(start, end) == "<") {
-          continue;
-        } else
-          throw("Wrong harder")
-      }
-    } else {
-      throw("error at position:", start);
-    }
-    if (r.CheckKeyWord() == "int") {
-      while (!r.CheckWhiteSpace(start, end)) {
-        start++;
-        end++;
-      }
-      if (b.substr(start, end) == "main") {
-        search(b[start]);
-        search(b[end]);
-        if (paren == 0) {
-          start++;
-          end++;
-        }
-        search(b[start]);
-
-        if (brace == 1) {
-          if (r.CheckfloatCont(start, end)) {
-            start++;
-            end++;
-            /*
-             if conditions for next token
-            */
-          }
-          if (r.CheckintCont(start, end)) {
-            start++;
-            end++;
-            /*
-           if conditions for next token
-           */
-          }
-          if (r.CheckKeyWord(start, end)) {
-            start++;
-            end++;
-            /*
-           if conditions for next token
-           */
-          }
-        }
-      }
-    }
+    break;
   }
+  if (r.CheckSpecialChar(start, end)) {
+    cout << "Special Char: " << b.substr(start, end) << endl;
+  } else if (r.CheckKeyWord(start, end)) {
+    cout << "Keyword" << b.substr(start, end) << endl;
+
+  } else if (r.CheckintCont(start, end)) {
+    cout << "IntConst" << b.substr(start, end) << endl;
+
+  } else if (r.CheckintCont(start, end)) {
+    cout << "IntConst" << b.substr(start, end) << endl;
+  } else if (r.CheckfloatCont(start, end)) {
+    cout << "FloatConst" << b.substr(start, end) << endl;
+  }
+  if (r.CheckKeyWord(start, end)) {
+    cout << "keyword: " << b.substr(start, end) << endl;
+  }
+  if (r.CheckfloatCont(start, end)) {
+    cout << "float cont: " << b.substr(start, end) << endl;
+  }
+  if (r.CheckintCont(start, end)) {
+    cout << "Int cont: " << b.substr(start, end) << endl;
+  }
+  start = end;
+  end++;
+  for (int i = 0; i <= b.substr(start, end).length(); i++) {
+    if (b[start] == ' ' || b[start] == '\n' || b[start] == '\t') {
+      start++;
+      end++;
+      continue;
+    }
+    if (b[end] != ' ') {
+      end++;
+      continue;
+    }
+    break;
+  }
+  cout << b.substr(start, end);
 }
