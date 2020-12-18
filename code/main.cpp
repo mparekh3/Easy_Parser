@@ -10,20 +10,7 @@
 
 
 using namespace std;
-/*
-class Compiler {
- private:
-  string source;
- public:
-  void foundIdentifier(uint32_t start, uint32_t end) {}
-  void foundIntConst(uint32_t start, uint32_t end) {}
-  void foundLongConst(uint32_t start, uint32_t end) {}
-};
-*/
 class RXEng {
- private:
-  // string source;
-
  public:
   string source;
 
