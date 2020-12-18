@@ -6,7 +6,7 @@ using namespace std;
 
 int main() {
     regex r( "class\\s+([a-zA-Z_][a-zA-Z0-9_]*)*\\s*:*\\s*((public|private) ([a-zA-Z_][a-zA-Z0-9_]*))*\\s*\\{");
-    ifstream f("hwregex");
+    ifstream f("class.txt");
     char line[1000];
 	int i=1;
     cmatch m;
