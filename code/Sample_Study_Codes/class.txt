@@ -1,0 +1,19 @@
+class A {
+};
+
+class A1
+{
+};
+class    B    	:  public A {
+};
+class C :private A {
+};
+
+class		D123: public A {
+};
+
+class E :public A{
+};
+
+class F2_VeryLong : public VeryLongClassName_123{
+};
